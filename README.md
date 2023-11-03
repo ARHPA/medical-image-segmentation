@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation">
-    <img src="cover.png" alt="Logo" width="" height="200">
+    <img src="images/cover.png" alt="Logo" width="" height="200">
   </a>
 
 <h1 align="center">Medica Image Segmentation</h1>
@@ -10,7 +10,7 @@
 Medical image segmentation is a crucial part of artificial intelligence. It involves tasks like identifying cancer in X-ray images. Our goal is to develop a model that can automatically outline the stomach and intestines in MRI scans. To achieve this, we will use a popular image segmentation algorithm.
 <div align="center">
   <a href="https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation">
-    <img src="image1.jpg" alt="Logo" width="" height="200">
+    <img src="images/image1.jpg" alt="Logo" width="" height="200">
   </a>
 </div>
 
