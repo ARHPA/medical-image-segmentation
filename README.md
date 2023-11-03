@@ -5,9 +5,23 @@
 
 <h1 align="center">Medica Image Segmentation</h1>
 </div>
-
+    
 ## 1. Problem Statement
-In this section, you'll find a comprehensive overview of the problem being addressed in the project.
+Medical image segmentation is a crucial part of artificial intelligence. It involves tasks like identifying cancer in X-ray images. Our goal is to develop a model that can automatically outline the stomach and intestines in MRI scans. To achieve this, we will use a popular image segmentation algorithm.
+<div align="center">
+  <a href="https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation">
+    <img src="image1.jpg" alt="Logo" width="" height="200">
+  </a>
+</div>
+
+In this figure, the tumor (pink thick line) is close to the stomach (red thick line). High doses of radiation are directed to the tumor while avoiding the stomach. The dose levels are represented by the rainbow of outlines, with higher doses represented by red and lower doses represented by green.
+
+However, this task presents challenges, especially in cancer detection, which can be difficult even for experts. Given the sensitivity and importance of this field, failing to detect cancer in a patient can lead to significant problems. On the other hand, incorrectly diagnosing someone with cancer can also cause substantial distress for the patient and their family.
+Our model needs to meet the following criteria:
+
+* High accuracy is essential, even if it sacrifices speed.
+* The model should provide clear explanations because of the sensitive nature of this field.
+* Thorough documentation is crucial for our project's success.
 
 ## 2. Related Works
 This section explores existing research and solutions related to medical image segmentation. 
