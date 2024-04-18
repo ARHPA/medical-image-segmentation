@@ -50,7 +50,7 @@ In this work, we propose the utilization of U-Net for our task. Our decision is 
 
 * Community Support and Resources: U-Net enjoys widespread adoption in the research community, providing access to pre-trained models, implementation libraries, and extensive documentation
   
-![architecture of proposed model](images/im2g.jpg)
+![architecture of proposed model](images/img2.png)
 
 This figure illustrates the architecture of our designed U-Net model, which consists of a contracting path to capture contextual information and an expanding path for precise localization.
 
