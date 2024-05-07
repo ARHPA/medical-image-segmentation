@@ -114,7 +114,7 @@ We train our model for 20 epochs and achieve the following performance:
 
 The training progress is visualized in the following plot:
 
-![training plot](images/img2.png)
+![training plot](images/img3.png)
 
 
 ### 4.5. Evaluate
@@ -125,4 +125,4 @@ Loss of each class:
 * Small Bowel Dice: 0.7370530366897583
 * Stomach Dice: 0.8681455254554749
 
-![model segment with ground truth](images/img3.png)
+![model segment with ground truth](images/img4.png)
