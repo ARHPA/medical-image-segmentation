@@ -24,6 +24,8 @@ Our model needs to meet the following criteria:
 * The model should provide clear explanations because of the sensitive nature of this field.
 * Thorough documentation is crucial for our project's success.
 
+<img src="images/animation.gif" alt="Animation" loop="infinite" />
+
 ## 2. Related Works
 there are several way to impelement segmentation algorithm for medical image classification. but we divide this into 2 group:
 * Convloutional methods:
