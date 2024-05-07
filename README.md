@@ -7,7 +7,8 @@
 </div>
     
 ## 1. Problem Statement
-Medical image segmentation is a crucial part of artificial intelligence. It involves tasks like identifying cancer in X-ray images. Our goal is to develop a model that can automatically outline the stomach and intestines in MRI scans. To achieve this, we will use a popular image segmentation algorithm.
+Radiation oncologists try to deliver high doses of radiation using X-ray beams pointed to tumors while avoiding the stomach and intestines. With newer technology such as integrated magnetic resonance imaging and linear accelerator systems, also known as MR-Linacs, oncologists are able to visualize the daily position of the tumor and intestines, which can vary day to day. In these scans, radiation oncologists must manually outline the position of the stomach and intestines in order to adjust the direction of the x-ray beams to increase the dose delivery to the tumor and avoid the stomach and intestines. This is a time-consuming and labor intensive process that can prolong treatments from 15 minutes a day to an hour a day, which can be difficult for patients to tolerate—unless deep learning could help automate the segmentation process. A method to segment the stomach and intestines would make treatments much faster and would allow more patients to get more effective treatment.
+[Project Home Page](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/overview)
 <div align="center">
   <a href="https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation">
     <img src="images/image1.jpg" alt="Logo" width="" height="200">
@@ -16,7 +17,7 @@ Medical image segmentation is a crucial part of artificial intelligence. It invo
 
 In this figure, the tumor (pink thick line) is close to the stomach (red thick line). High doses of radiation are directed to the tumor while avoiding the stomach. The dose levels are represented by the rainbow of outlines, with higher doses represented by red and lower doses represented by green.
 
-However, this task presents challenges, especially in cancer detection, which can be difficult even for experts. Given the sensitivity and importance of this field, failing to detect cancer in a patient can lead to significant problems. On the other hand, incorrectly diagnosing someone with cancer can also cause substantial distress for the patient and their family.
+However, this task presents challenges, which can be difficult even for experts. Given the sensitivity and importance of this field, failing to detect stomach in a patient can lead to significant problems.
 Our model needs to meet the following criteria:
 
 * High accuracy is essential, even if it sacrifices speed.
@@ -55,20 +56,73 @@ In this work, we propose the utilization of U-Net for our task. Our decision is 
 This figure illustrates the architecture of our designed U-Net model, which consists of a contracting path to capture contextual information and an expanding path for precise localization.
 
 ## 4. Implementation
-This section delves into the practical aspects of the project's implementation.
+In this part, we will discuss the different components of the project in detail.
 
 ### 4.1. Dataset
-Under this subsection, you'll find information about the dataset used for the medical image segmentation task. It includes details about the dataset source, size, composition, preprocessing, and loading applied to it.
-[Dataset](https://drive.google.com/file/d/1-2ggesSU3agSBKpH-9siKyyCYfbo3Ixm/view?usp=sharing)
+In this competition we are segmenting organs cells in images. The training annotations are provided as RLE-encoded masks, and the images are in 16-bit grayscale PNG format.
+
+Each case in this competition is represented by multiple sets of scan slices (each set is identified by the day the scan took place). Some cases are split by time (early days are in train, later days are in test) while some cases are split by case - the entirety of the case is in train or test. The goal of this competition is to be able to generalize to both partially and wholly unseen cases.
+
+* train.csv - IDs and masks for all training objects.
+* sample_submission.csv - a sample submission file in the correct format
+* train - a folder of case/day folders, each containing slice images for a particular case on a given day.
+  
+you can download dataset [here](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/data)
 
 ### 4.2. Model
-In this subsection, the architecture and specifics of the deep learning model employed for the segmentation task are presented. It describes the model's layers, components, libraries, and any modifications made to it.
+In this project we use U-net, we implement U-net with 
+For this project, we employ the U-Net architecture, a popular choice for image segmentation tasks. We use the [segmentation_models.pytorch](https://github.com/qubvel/segmentation_models.pytorch/tree/master) library for its implementation.
+The segmentation model is a PyTorch nn.Module, which can be created as follows:
+
+```python
+import segmentation_models_pytorch as smp
+
+model = smp.Unet(
+    encoder_name="resnet34",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+    encoder_weights="imagenet",     # use `imagenet` pre-trained weights for encoder initialization
+    in_channels=1,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+    classes=3,                      # model output channels (number of classes in your dataset)
+)
+```
 
 ### 4.3. Configurations
-This part outlines the configuration settings used for training and evaluation. It includes information on hyperparameters, optimization algorithms, loss function, metric, and any other settings that are crucial to the model's performance.
+We use the Dice loss function and Dice Metric for training and evaluation, respectively. The model is optimized using the Stochastic Gradient Descent (SGD) optimizer with a multi-step learning rate scheduler.
+```
+optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
+loss_fn = smp.losses.DiceLoss(mode='multilabel')
+lr_scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5, 10, 15], gamma=0.1)
+```
+
+The training parameters used are as follows:
+
+```python
+batch_size = 32
+backbone = 'efficientnet-b1'
+encoder_weights='imagenet'
+num_classes = 3
+classes = ['large_bowel', 'small_bowel', 'stomach']
+lr = 0.1
+momentum = 0.9
+num_epochs = 20
+```
 
 ### 4.4. Train
-Here, you'll find instructions and code related to the training of the segmentation model. This section covers the process of training the model on the provided dataset.
+We train our model for 20 epochs and achieve the following performance:
+
+* Train: loss = 0.121, dice metric = 0.874
+* Validation: loss = 0.2331, dice metric = 0.799
+
+The training progress is visualized in the following plot:
+
+![training plot](images/img3.png)
+
 
 ### 4.5. Evaluate
-In the evaluation section, the methods and metrics used to assess the model's performance are detailed. It explains how the model's segmentation results are quantified and provides insights into the model's effectiveness.
+We achieve a dice metric of 0.7980851531028748 on the test set.
+Loss of each class:
+
+* Large Bowel Dice: 0.8132762312889099
+* Small Bowel Dice: 0.7370530366897583
+* Stomach Dice: 0.8681455254554749
+
+![model segment with ground truth](images/img3.png)
