@@ -114,7 +114,7 @@ We train our model for 20 epochs and achieve the following performance:
 
 The training progress is visualized in the following plot:
 
-![training plot](images/img3.png)
+![training plot](images/img2.png)
 
 
 ### 4.5. Evaluate
